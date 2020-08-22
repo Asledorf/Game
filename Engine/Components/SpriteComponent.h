@@ -16,9 +16,7 @@ namespace Engine
 
 	protected:
 		std::string textureName;
+		Vector2 origin;
 		SDL_Rect rect{ 0,0,0,0 };
-
-
-		//class Texture* texture;
 	};
 }

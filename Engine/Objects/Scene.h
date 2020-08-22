@@ -8,11 +8,14 @@ namespace Engine
 
 	class Scene : public Object
 	{
+	public:
 		// Inherited via Object
 		virtual void Create(void* data = nullptr) override;
 		virtual void Destroy() override;
 
 		void Read(const rapidjson::Value& value) override;
+
+		void ReadGameObjects(const rapidjson::Value& value);
 
 		void Update() override;
 		void Draw();

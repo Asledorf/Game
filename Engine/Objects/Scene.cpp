@@ -17,21 +17,52 @@ namespace Engine
 
 	void Scene::Read(const rapidjson::Value& value)
 	{
+		const rapidjson::Value& objectsValue = value["GameObjects"];
+		if (objectsValue.IsArray())
+		{
+			ReadGameObjects(objectsValue);
+		}
+
 		const rapidjson::Value& objectValue = value["GameObject"];
 		if (objectValue.IsObject())
 		{
 			std::string typeName;
-			json::Get(value, "type", typeName);
-			GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
+			// read component “type” name from json (Get)
+			GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);// create from object factory, use typeName as the key
 
-			if (gameObject)
+				if (gameObject)
+				{
+					gameObject->Create(engine);
+					// call game object read (pass in objectValue)
+					gameObject->Read(objectValue);
+					// call AddGameObject passing in the game object
+					AddGameObj(gameObject);
+				}
+		}
+	}
+
+	void Scene::ReadGameObjects(const rapidjson::Value& value)
+	{
+
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+		{
+			const rapidjson::Value& objectValue = value[i];
+			if (objectValue.IsObject())
 			{
-				gameObject->Create(engine);
-				gameObject->Read(objectValue);
-				AddGameObj(gameObject);
+				std::string typeName;
+				json::Get(value, "type", typeName);
+				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
+			
+				if (gameObject)
+				{
+					gameObject->Create(engine);
+					gameObject->Read(objectValue);
+					AddGameObj(gameObject);
+				}
 			}
 		}
 	}
+
 
 	void Scene::Update()
 	{
@@ -53,7 +84,6 @@ namespace Engine
 	{
 		for (auto gameObject : gameObjects)
 		{
-			//! compare game object name to name parameter (==)
 			if (gameObject->name == name)
 			{
 				return gameObject;

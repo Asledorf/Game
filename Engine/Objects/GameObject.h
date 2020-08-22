@@ -15,6 +15,8 @@ namespace Engine
 		virtual void Destroy() override;
 
 		void Read(const rapidjson::Value& val) override;
+		void ReadComponents(const rapidjson::Value& value);
+
 
 		void Update();
 		void Draw();

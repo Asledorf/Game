@@ -20,8 +20,9 @@ namespace Engine
 
 	void Sprite::Read(const rapidjson::Value& val)
 	{
-		json::Get(val, "texture", textureName);
-		json::Get(val, "rect", rect);
+		json::Get(val,	"texture",	textureName);
+		json::Get(val,	"origin",	origin);
+		json::Get(val,	"rect",		rect);
 	}
 	
 	void Sprite::Update()
@@ -35,6 +36,6 @@ namespace Engine
 		//TEMPORARY
 		Cars carSet;
 		rect = { carSet.racer_black };
-		texture->Draw(rect,{ owner->transform.position.x - (rect.w / 2), owner->transform.position.y - (rect.h / 2) }, Vector2::one * owner->transform.scale, owner->transform.angle);
+		texture->Draw(rect, owner->transform.position, owner->transform.angle, Vector2::one * owner->transform.scale, origin);
 	}
 }

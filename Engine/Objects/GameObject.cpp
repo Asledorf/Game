@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "GameObject.h"
+#include "Objectfactory.h"
 #include "Components/Component.h"
 #include "Components/RenderComponent.h"
+
 
 namespace Engine
 {
@@ -15,14 +17,44 @@ namespace Engine
 		RemoveAllComponents();
 	}
 
-	void GameObject::Read(const rapidjson::Value& val)
+	void GameObject::Read(const rapidjson::Value& value)
 	{
-		json::Get(val, "name", name);
+		json::Get(value, "name", name);
 
-		json::Get(val, "position", transform.position );
-		json::Get(val, "scale", transform.scale );
-		json::Get(val, "angle", transform.angle );
+		json::Get(value, "position", transform.position);
+		json::Get(value, "scale", transform.scale);
+		json::Get(value, "angle", transform.angle);
+
+		const rapidjson::Value& componentsValue = value["Components"];
+		if (componentsValue.IsArray())
+		{
+			ReadComponents(componentsValue);
+		}
 	}
+
+
+	void GameObject::ReadComponents(const rapidjson::Value& value)
+	{
+		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
+		{
+			const rapidjson::Value& componentValue = value[i];
+			if (componentValue.IsObject())
+			{
+				std::string typeName;
+				json::Get(componentValue, "type", typeName);
+
+				Component* component = ObjectFactory::Instance().Create<Component>(typeName);
+				if (component)
+				{
+					component->Create(this);
+					component->Read(componentValue);
+					components.push_back(component);
+				}
+			}
+		}
+	}
+
+
 
 	void GameObject::Update()
 	{

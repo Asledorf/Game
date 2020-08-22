@@ -59,6 +59,7 @@ namespace Engine
 		static const Vector2 forward;
 		static const Vector2 one;
 		static const Vector2 zero;
+		static const Vector2 half;
 	};
 
 	inline float Vector2::length() const
