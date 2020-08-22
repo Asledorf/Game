@@ -8,6 +8,33 @@
 #define PCH_H
 
 // add headers that you want to pre-compile here
+
+
 #include "framework.h"
+#include "Math/Math.h"
+
+	//SDL libraries
+#include <SDL.h>
+#include <SDL_image.h>
+
+	//data types
+#include <string>
+
+	//IO
+#include <fstream>
+#include <iostream>
+
+	//containers
+#include <vector>
+#include <array>
+#include <list>
+#include <map>
+
+	//time
+#include <chrono>
+	
+	//asserts
+#include <cassert>
+#include "core/assert.h"
 
 #endif //PCH_H
