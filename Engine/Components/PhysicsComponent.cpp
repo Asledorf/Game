@@ -24,6 +24,3 @@ namespace Engine
 		owner->transform.position += velocity;// *owner->engine->GetTimer().DT();
 	}
 }
-//velocity += force;
-//velocity *= 0.95f;
-//player.transform.position += velocity;

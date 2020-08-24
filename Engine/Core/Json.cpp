@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "Json.h"
 
+#include "filereadstream.h"
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 namespace Engine
 {
@@ -9,17 +15,17 @@ namespace Engine
 		bool Load(const std::string& filename, rapidjson::Document& document)
 		{
 			bool success = false;
-			std::ifstream stream(filename);
-			ASSERT(stream.good());
-			ASSERT_MSG(stream.good(), "Error: File not loaded: " + filename);
-			if (stream.is_open())
-			{
-				rapidjson::IStreamWrapper istream(stream);
-				document.ParseStream(istream);
-				success = document.IsObject();
-			}
-			return success;
 
+			errno_t err;
+			FILE* fp;
+			err = fopen_s(&fp,filename.c_str(), "r");
+			char readbuffer[10000];
+			rapidjson::FileReadStream fff(fp, readbuffer, sizeof(readbuffer));
+
+			document.ParseStream(fff);
+
+			fclose(fp);
+			return success;
 		}
 
 		bool Get(const rapidjson::Value& value, const std::string& name, int& data)
@@ -44,7 +50,7 @@ namespace Engine
 			return true;
 
 		}
-		bool Engine::json::Get(const rapidjson::Value& value, const std::string& name, float& data)
+		bool Get(const rapidjson::Value& value, const std::string& name, float& data)
 		{
 			// check if 'name' member exists
 			auto iter = value.FindMember(name.c_str());
@@ -65,7 +71,7 @@ namespace Engine
 
 			return true;
 		}
-		bool Engine::json::Get(const rapidjson::Value& value, const std::string& name, bool& data)
+		bool Get(const rapidjson::Value& value, const std::string& name, bool& data)
 		{
 			// check if 'name' member exists
 			auto iter = value.FindMember(name.c_str());
@@ -86,10 +92,14 @@ namespace Engine
 
 			return true;
 		}
-		bool Engine::json::Get(const rapidjson::Value& value, const std::string& name, std::string& data)
+		bool Get(const rapidjson::Value& value, const std::string& name, std::string& data)
 		{
 			// check if 'name' member exists
-			auto iter = value.FindMember(name.c_str());
+			// name must be an object?
+			//auto* namePlus = name.c_str();
+			//auto iter = value.FindMember((name));
+			auto iter = value.FindMember((name.c_str()));
+			//auto iter = value.FindMember(namePlus);
 			if (iter == value.MemberEnd())
 			{
 				return false;
@@ -136,7 +146,7 @@ namespace Engine
 			return true;
 		}
 
-		bool Engine::json::Get(const rapidjson::Value& value, const std::string& name, Color& data)
+		bool Get(const rapidjson::Value& value, const std::string& name, Color& data)
 		{
 			auto iter = value.FindMember(name.c_str());
 			if (iter == value.MemberEnd())

@@ -21,6 +21,7 @@ int main(int, char**)
 	scene.Create(&engine);
 	rapidjson::Document document;
 	Engine::json::Load("scene.txt", document);
+	//at this point document is an object
 	scene.Read(document);
 
 	/// SETUP

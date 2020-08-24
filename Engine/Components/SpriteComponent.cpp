@@ -33,9 +33,6 @@ namespace Engine
 	void Sprite::Draw()
 	{
 		Texture* texture = owner->engine->GetSystem<ResourceManager>()->Get<Texture>(textureName, owner->engine->GetSystem<Renderer>());
-		//TEMPORARY
-		Cars carSet;
-		rect = { carSet.racer_black };
 		texture->Draw(rect, owner->transform.position, owner->transform.angle, Vector2::one * owner->transform.scale, origin);
 	}
 }

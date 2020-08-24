@@ -26,8 +26,8 @@
 			"type":"GameObject",
 			"name":"Player",
 			"position":[
-				300,
-				400
+				420,
+				325
 			],
 			"scale":1,
 			"angle":45,
@@ -42,10 +42,10 @@
 					"type":"Sprite",
 					"texture":"cars.png",
 					"rect":[
-						64,
-						110,
-						60,
-						112
+						178,
+						346,
+						45,
+						86
 					]
 				}
 			]

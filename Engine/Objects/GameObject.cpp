@@ -19,6 +19,9 @@ namespace Engine
 
 	void GameObject::Read(const rapidjson::Value& value)
 	{
+		//TEST
+		//ASSERT(value.IsObject());
+
 		json::Get(value, "name", name);
 
 		json::Get(value, "position", transform.position);
@@ -37,6 +40,9 @@ namespace Engine
 	{
 		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
 		{
+			//TEST
+			//ASSERT(value.IsObject());
+
 			const rapidjson::Value& componentValue = value[i];
 			if (componentValue.IsObject())
 			{

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Objectfactory.h"
+#include <string>
 
 namespace Engine
 {
@@ -18,41 +19,49 @@ namespace Engine
 	void Scene::Read(const rapidjson::Value& value)
 	{
 		const rapidjson::Value& objectsValue = value["GameObjects"];
+		//std::cout << objectsValue.GetString();
 		if (objectsValue.IsArray())
 		{
 			ReadGameObjects(objectsValue);
 		}
 
-		const rapidjson::Value& objectValue = value["GameObject"];
-		if (objectValue.IsObject())
-		{
-			std::string typeName;
-			// read component “type” name from json (Get)
-			GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);// create from object factory, use typeName as the key
+		//const rapidjson::Value& objectValue = value["GameObject"];
+		//if (objectValue.IsObject())
+		//{
+		//	//TEST
+		//	ASSERT(value.IsObject());
 
-				if (gameObject)
-				{
-					gameObject->Create(engine);
-					// call game object read (pass in objectValue)
-					gameObject->Read(objectValue);
-					// call AddGameObject passing in the game object
-					AddGameObj(gameObject);
-				}
-		}
+		//	std::string typeName;
+		//	//json::Get(value, "type", typeName);
+		//	json::Get(objectValue, "type", typeName);
+
+		//	//json::Get(value, value["GameObject"]["type"].GetString(), typeName);
+		//	GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);// create from object factory, use typeName as the key
+		//	ASSERT(gameObject);
+		//		if (gameObject)
+		//		{
+		//			gameObject->Create(engine);
+		//			// call game object read (pass in objectValue)
+		//			gameObject->Read(objectValue);
+		//			// call AddGameObject passing in the game object
+		//			AddGameObj(gameObject);
+		//		}
+		//}
 	}
 
 	void Scene::ReadGameObjects(const rapidjson::Value& value)
 	{
-
 		for (rapidjson::SizeType i = 0; i < value.Size(); i++)
 		{
 			const rapidjson::Value& objectValue = value[i];
+			ASSERT(objectValue.IsObject());
 			if (objectValue.IsObject())
 			{
 				std::string typeName;
-				json::Get(value, "type", typeName);
+				json::Get(objectValue, "type", typeName);
+				//json::Get(value, "type", typeName);
+				//json::Get(value, value["GameObject"]["type"].GetString(), typeName);
 				GameObject* gameObject = ObjectFactory::Instance().Create<GameObject>(typeName);
-			
 				if (gameObject)
 				{
 					gameObject->Create(engine);
